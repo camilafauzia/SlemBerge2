@@ -26,6 +26,6 @@ Tangkapan layar komponen produk:
 2. Deskripsi
 <img src ="assets/img/Description.png" width="400">
 3. Peta
-<img src ="assets/img/Map.png" width="400">
+<img src ="assets/img/Peta.png" width="400">
 4. Data
 <img src ="assets/img/Data.png" width="400">
