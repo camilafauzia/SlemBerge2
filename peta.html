@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Auberges Map</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+    <!-- Search CSS Library -->
+    <link rel="stylesheet" href="assets/plugins/leaflet-search/leaflet-search.css" />
+
+    <!-- Geolocation CSS Library for Plugin -->
+    <link rel="stylesheet"
+        href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.css" />
+
+    <!-- Leaflet Mouse Position CSS Library -->
+    <link rel="stylesheet" href="assets/plugins/leaflet-mouseposition/L.Control.MousePosition.css" />
+
+    <!-- Leaflet Measure CSS Library -->
+    <link rel="stylesheet" href="assets/plugins/leaflet-measure/leaflet-measure.css" />
+
+    <!-- EasyPrint CSS Library -->
+    <link rel="stylesheet" href="assets/plugins/leaflet-easyprint/easyPrint.css" />
+
+    <!-- Marker Cluster -->
+    <link rel="stylesheet" href="assets/plugins/leaflet-markercluster/MarkerCluster.css">
+    <link rel="stylesheet" href="assets/plugins/leaflet-markercluster/MarkerCluster.Default.css">
+
+    <!--Routing-->
+    <link rel="stylesheet" href="assets/plugins/leaflet-routing/leaflet-routing-machine.css" />
+
+
+    <style>
+        /* Background pada Judul */
+        *.info {
+            padding: 6px 8px;
+            font: 14px/16px Arial, Helvetica, sans-serif;
+            background: rgb(255, 255, 255);
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .info h2 {
+            margin: 0 0 5px;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+    <style>
+        body {
+            background-color: rgb(42, 42, 51);
+        }
+    </style>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">SlemBerge</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="deskripsi.html">Desc</a></li>
+                <li class="active"><a href="peta.php">Map</a></li>
+                <li><a href="data.html">Data</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Search JavaScript Library -->
+    <script src="assets/plugins/leaflet-search/leaflet-search.js"></script>
+
+    <!-- Geolocation Javascript Library -->
+    <script
+        src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.min.js"></script>
+
+    <!-- Leaflet Mouse Position JavaScript Library -->
+    <script src="assets/plugins/leaflet-mouseposition/L.Control.MousePosition.js"></script>
+
+    <!-- Leaflet Measure JavaScript Library -->
+    <script src="assets/plugins/leaflet-measure/leaflet-measure.js"></script>
+
+    <!-- EasyPrint JavaScript Library -->
+    <script src="assets/plugins/leaflet-easyprint/leaflet.easyPrint.js"></script>
+    <div id="map" style="height: 100vh;"></div>
+
+    <!-- Marker Cluster -->
+    <script src="assets/plugins/leaflet-markercluster/leaflet.markercluster.js"></script>
+    <script src="assets/plugins/leaflet-markercluster/leaflet.markercluster-src.js"></script>
+
+    <!--Routing-->
+    <script src="assets/plugins/leaflet-routing/leaflet-routing-machine.js"></script>
+    <script src="assets/plugins/leaflet-routing/leaflet-routing-machine.min.js"></script>
+
+
+
+    <script>
+        /* Initial Map */
+        var map = L.map('map').setView([-7.794760241050732, 110.36718249219427], 13);
+    
+        /* Tile Basemap */
+        var basemap1 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | <a href="DIVSIG UGM" target="_blank">DIVSIG UGM</a>'
+        });
+        var basemap2 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri | <a href="Latihan WebGIS" target="_blank">DIVSIG UGM</a>'
+        });
+        var basemap3 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri | <a href="Latihan WebGIS" target="_blank">DIVSIG UGM</a>'
+        });
+        var basemap4 = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+        });
+        basemap4.addTo(map);
+    
+        /* Title Control */
+        var title = new L.Control();
+        title.onAdd = function(map) {
+            this._div = L.DomUtil.create("div", "info");
+            this.update();
+            return this._div;
+        };
+        title.update = function() {
+            this._div.innerHTML = "<h2>THE STAR HOTELS DISTRIBUTION IN SLEMAN</h2>";
+        };
+        title.addTo(map);
+    
+        /* GeoJSON Data */
+        var geojsonData = {
+            "type": "FeatureCollection",
+            "features": [
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [110.367182, -7.794760] }, "properties": { "name": "Hotel 1", "description": "Deskripsi Hotel 1." } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [110.363200, -7.791100] }, "properties": { "name": "Hotel 2", "description": "Deskripsi Hotel 2." } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [110.355600, -7.790300] }, "properties": { "name": "Hotel 3", "description": "Deskripsi Hotel 3." } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [110.378300, -7.795800] }, "properties": { "name": "Hotel 4", "description": "Deskripsi Hotel 4." } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [110.372500, -7.788400] }, "properties": { "name": "Hotel 5", "description": "Deskripsi Hotel 5." } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [110.371200, -7.783500] }, "properties": { "name": "Hotel 6", "description": "Deskripsi Hotel 6." } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [110.368500, -7.780600] }, "properties": { "name": "Hotel 7", "description": "Deskripsi Hotel 7." } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [110.365900, -7.778900] }, "properties": { "name": "Hotel 8", "description": "Deskripsi Hotel 8." } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [110.362000, -7.780800] }, "properties": { "name": "Hotel 9", "description": "Deskripsi Hotel 9." } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [110.359000, -7.785200] }, "properties": { "name": "Hotel 10", "description": "Deskripsi Hotel 10." } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [110.375100, -7.799400] }, "properties": { "name": "Hotel 11", "description": "Deskripsi Hotel 11." } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [110.380000, -7.790100] }, "properties": { "name": "Hotel 12", "description": "Deskripsi Hotel 12." } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [110.382200, -7.784300] }, "properties": { "name": "Hotel 13", "description": "Deskripsi Hotel 13." } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [110.387000, -7.779800] }, "properties": { "name": "Hotel 14", "description": "Deskripsi Hotel 14." } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [110.390500, -7.774400] }, "properties": { "name": "Hotel 15", "description": "Deskripsi Hotel 15." } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [110.395600, -7.769700] }, "properties": { "name": "Hotel 16", "description": "Deskripsi Hotel 16." } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [110.400100, -7.765200] }, "properties": { "name": "Hotel 17", "description": "Deskripsi Hotel 17." } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [110.407600, -7.763000] }, "properties": { "name": "Hotel 18", "description": "Deskripsi Hotel 18." } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [110.415200, -7.764800] }, "properties": { "name": "Hotel 19", "description": "Deskripsi Hotel 19." } },
+                { "type": "Feature", "geometry": { "type": "Point", "coordinates": [110.419800, -7.769200] }, "properties": { "name": "Hotel 20", "description": "Deskripsi Hotel 20." } }
+            ]
+        };
+    
+        /* Add GeoJSON Layer */
+        var geojsonLayer = L.geoJSON(geojsonData, {
+            onEachFeature: function(feature, layer) {
+                if (feature.properties && feature.properties.name) {
+                    layer.bindPopup(
+                        `<b>${feature.properties.name}</b><br>${feature.properties.description}`
+                    );
+                }
+            }
+        }).addTo(map);
+    
+        /* Control Layer */
+        var baseMaps = {
+            "OpenStreetMap": basemap1,
+            "Esri World Street": basemap2,
+            "Esri Imagery": basemap3,
+            "Stadia Dark Mode": basemap4
+        };
+        var overlayMaps = {
+            "Markers (GeoJSON)": geojsonLayer
+        };
+        L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);
+    
+        /* Retain all existing plugins and features */
+        L.control.scale({ maxWidth: 150, position: 'bottomright' }).addTo(map);
+        var locateControl = L.control.locate({ position: "topleft" }).addTo(map);
+        var measureControl = new L.Control.Measure({ position: "topleft" }).addTo(map);
+        L.easyPrint({ title: "Print" }).addTo(map);
+    
+        /* Image Legend */
+        L.Control.Legend = L.Control.extend({
+            onAdd: function(map) {
+                var img = L.DomUtil.create('img');
+                img.src = 'assets/img/legend/legendafix.png';
+                img.style.width = '250px';
+                return img;
+            }
+        });
+        L.control.Legend = function(opts) {
+            return new L.Control.Legend(opts);
+        };
+        L.control.Legend({ position: 'bottomleft' }).addTo(map);
+    
+        /* Mouse Position */
+        L.control.mousePosition({
+            position: "bottomright",
+            separator: ",",
+            prefix: "Point Coordinate: "
+        }).addTo(map);
+    </script>
+</body>
+
+</html>
